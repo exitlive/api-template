@@ -1,0 +1,498 @@
+{
+  "kind": "discovery#restDescription",
+  "etag": "70988657ee3dbf7d0931fdb90a610ed33f0c1893",
+  "discoveryVersion": "v1",
+  "id": "account:v1",
+  "name": "account",
+  "version": "v1",
+  "revision": "0",
+  "protocol": "rest",
+  "baseUrl": "http://localhost:8080/account/v1/",
+  "basePath": "/account/v1/",
+  "rootUrl": "http://localhost:8080/",
+  "servicePath": "account/v1/",
+  "parameters": {},
+  "schemas": {
+    "SignInRequest": {
+      "id": "SignInRequest",
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "required": true
+        },
+        "password": {
+          "type": "string",
+          "description": "The SHA256 hash of the password",
+          "required": true
+        },
+        "longLived": {
+          "type": "boolean",
+          "description": "Whether you want a long lived session (use this in an app)"
+        }
+      }
+    },
+    "User": {
+      "id": "User",
+      "type": "object",
+      "properties": {
+        "creationTime": {
+          "type": "string",
+          "required": true,
+          "format": "date-time"
+        },
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "email": {
+          "type": "string",
+          "required": true
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "lastSeenNotificationMicrosecondsSinceEpoch": {
+          "type": "string",
+          "required": true,
+          "format": "int64"
+        },
+        "country": {
+          "type": "string"
+        },
+        "oAuthAccounts": {
+          "type": "array",
+          "items": {
+            "$ref": "OAuthAccount"
+          }
+        },
+        "isAdult": {
+          "type": "boolean",
+          "description": "Whether the user is over the age of 18"
+        },
+        "lastSignIn": {
+          "type": "string",
+          "description": "The time, this user has last been logged in.",
+          "format": "date-time"
+        }
+      }
+    },
+    "OAuthAccount": {
+      "id": "OAuthAccount",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "accountId": {
+          "type": "string",
+          "required": true
+        },
+        "email": {
+          "type": "string",
+          "required": true
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "isVerified": {
+          "type": "boolean",
+          "required": true
+        },
+        "provider": {
+          "type": "string",
+          "required": true
+        }
+      }
+    },
+    "Registration": {
+      "id": "Registration",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "The unencrypted plain text email. This will be verified by hashedEmail",
+          "required": true
+        },
+        "hashedEmail": {
+          "type": "string",
+          "description": "The hashed email address that has been sent to the user by email",
+          "required": true
+        },
+        "password": {
+          "type": "string",
+          "description": "A SHA256 hash of the password",
+          "required": true
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the user",
+          "required": true
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "The ISO2 country code of the user",
+          "required": true
+        },
+        "longLived": {
+          "type": "boolean",
+          "description": "Whether you want a long lived session (use this in an app)"
+        },
+        "referrer": {
+          "type": "string",
+          "description": "Might be a user_id or page_id"
+        }
+      }
+    },
+    "RegistrationInfo": {
+      "id": "RegistrationInfo",
+      "type": "object",
+      "properties": {
+        "pages": {
+          "type": "array",
+          "description": "List of pages this user was made an administrator of before registering",
+          "required": true,
+          "items": {
+            "$ref": "Page"
+          }
+        },
+        "user": {
+          "$ref": "User",
+          "description": "The user that has been created",
+          "required": true
+        }
+      }
+    },
+    "Page": {
+      "id": "Page",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "handle": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        }
+      }
+    },
+    "OauthToken": {
+      "id": "OauthToken",
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "required": true
+        },
+        "provider": {
+          "type": "string",
+          "required": true,
+          "enum": ["apple", "google", "facebook", "twitter"],
+          "enumDescriptions": [
+            "When using Apple as OAuth provider",
+            "When using Google as OAuth provider",
+            "When using Facebook as OAuth provider",
+            "When using Twitter as OAuth provider"
+          ]
+        },
+        "longLived": {
+          "type": "boolean",
+          "description": "Whether you want a long lived session (use this in an app)"
+        },
+        "platform": {
+          "type": "string",
+          "description": "The platform on which the oauth authentication has been made.",
+          "enum": ["mobile", "ios", "android", "web"],
+          "enumDescriptions": ["Deprecated", "iOS", "Android", "Web"]
+        }
+      }
+    },
+    "OauthRegistration": {
+      "id": "OauthRegistration",
+      "type": "object",
+      "properties": {
+        "oauthToken": {
+          "$ref": "OauthToken",
+          "required": true
+        },
+        "referrer": {
+          "type": "string",
+          "description": "Might be a user_id or page_id"
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "The ISO2 country code of the user",
+          "required": true
+        }
+      }
+    },
+    "ResetPassword": {
+      "id": "ResetPassword",
+      "type": "object",
+      "properties": {
+        "oldPassword": {
+          "type": "string",
+          "required": true
+        },
+        "password": {
+          "type": "string",
+          "required": true
+        }
+      }
+    },
+    "ListOfNotification": {
+      "id": "ListOfNotification",
+      "type": "array",
+      "items": {
+        "$ref": "Notification"
+      }
+    },
+    "Notification": {
+      "id": "Notification",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "creationTime": {
+          "type": "string",
+          "required": true,
+          "format": "date-time"
+        },
+        "creationMicrosecondsSinceEpoch": {
+          "type": "string",
+          "required": true,
+          "format": "int64"
+        },
+        "type": {
+          "type": "string",
+          "required": true,
+          "enum": [
+            "generic",
+            "newFollower",
+            "purchase",
+            "changedBankAccount",
+            "userJoinedAsManager",
+            "teleportUploadFinished"
+          ],
+          "enumDescriptions": [
+            "Generic",
+            "New Follower",
+            "Purchase",
+            "Changed Bank Account",
+            "User Joined As Manager",
+            "Teleport Upload Finished"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "required": true
+        },
+        "messageHtml": {
+          "type": "string",
+          "required": true
+        },
+        "isRead": {
+          "type": "boolean",
+          "required": true
+        },
+        "imageUrl": {
+          "type": "string",
+          "required": true
+        },
+        "linkUrl": {
+          "type": "string"
+        },
+        "contextImageUrl": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "methods": {},
+  "resources": {
+    "account": {
+      "methods": {
+        "signIn": {
+          "id": "AccountApi.account.signIn",
+          "path": "signIn",
+          "httpMethod": "POST",
+          "description": "Post username and password to this resource to sign in",
+          "parameters": {},
+          "parameterOrder": [],
+          "request": {
+            "$ref": "SignInRequest"
+          },
+          "response": {
+            "$ref": "User"
+          }
+        },
+        "logout": {
+          "id": "AccountApi.account.logout",
+          "path": "logout",
+          "httpMethod": "GET",
+          "description": "DEPRECATED. Simply delete your JWT to logout.",
+          "parameters": {},
+          "parameterOrder": []
+        },
+        "register": {
+          "id": "AccountApi.account.register",
+          "path": "register",
+          "httpMethod": "POST",
+          "parameters": {},
+          "parameterOrder": [],
+          "request": {
+            "$ref": "Registration"
+          },
+          "response": {
+            "$ref": "RegistrationInfo"
+          }
+        },
+        "signInWithToken": {
+          "id": "AccountApi.account.signInWithToken",
+          "path": "signInWithToken",
+          "httpMethod": "POST",
+          "description": "Needs to be called with the OAuth token",
+          "parameters": {},
+          "parameterOrder": [],
+          "request": {
+            "$ref": "OauthToken"
+          },
+          "response": {
+            "$ref": "User"
+          }
+        },
+        "registerWithToken": {
+          "id": "AccountApi.account.registerWithToken",
+          "path": "registerWithToken",
+          "httpMethod": "POST",
+          "description": "Needs to be called with the OAuth token after successful authentication",
+          "parameters": {},
+          "parameterOrder": [],
+          "request": {
+            "$ref": "OauthRegistration"
+          },
+          "response": {
+            "$ref": "RegistrationInfo"
+          }
+        },
+        "sendVerifyRegistrationEmail": {
+          "id": "AccountApi.account.sendVerifyRegistrationEmail",
+          "path": "sendVerifyRegistrationEmail",
+          "httpMethod": "GET",
+          "description": "Sends an email with a registration link to given email address",
+          "parameters": {
+            "email": {
+              "type": "string",
+              "description": "Query parameter: 'email'.",
+              "required": false,
+              "location": "query"
+            },
+            "referrerUrlString": {
+              "type": "string",
+              "description": "Query parameter: 'referrerUrlString'.",
+              "required": false,
+              "location": "query"
+            },
+            "recaptchaResponse": {
+              "type": "string",
+              "description": "Query parameter: 'recaptchaResponse'.",
+              "required": false,
+              "location": "query"
+            }
+          },
+          "parameterOrder": []
+        },
+        "sendResetPasswordEmail": {
+          "id": "AccountApi.account.sendResetPasswordEmail",
+          "path": "sendResetPasswordEmail",
+          "httpMethod": "GET",
+          "parameters": {
+            "email": {
+              "type": "string",
+              "description": "Query parameter: 'email'.",
+              "required": false,
+              "location": "query"
+            }
+          },
+          "parameterOrder": []
+        },
+        "resetPassword": {
+          "id": "AccountApi.account.resetPassword",
+          "path": "resetPassword",
+          "httpMethod": "POST",
+          "parameters": {},
+          "parameterOrder": [],
+          "request": {
+            "$ref": "ResetPassword"
+          },
+          "response": {
+            "$ref": "User"
+          }
+        }
+      },
+      "resources": {}
+    },
+    "notification": {
+      "methods": {
+        "list": {
+          "id": "AccountApi.notification.list",
+          "path": "notifications",
+          "httpMethod": "GET",
+          "description": "Retrieves all notifications.",
+          "parameters": {
+            "limit": {
+              "type": "integer",
+              "description": "Query parameter: 'limit'.",
+              "required": false,
+              "location": "query"
+            },
+            "offset": {
+              "type": "integer",
+              "description": "Query parameter: 'offset'.",
+              "required": false,
+              "location": "query"
+            },
+            "startingFromMicrosecondsSinceEpoch": {
+              "type": "string",
+              "description": "Query parameter: 'startingFromMicrosecondsSinceEpoch'.",
+              "required": false,
+              "location": "query"
+            }
+          },
+          "parameterOrder": [],
+          "response": {
+            "$ref": "ListOfNotification"
+          }
+        },
+        "markAsRead": {
+          "id": "AccountApi.notification.markAsRead",
+          "path": "notifications/{notificationId}/markAsRead",
+          "httpMethod": "POST",
+          "description": "Marks given notification as read",
+          "parameters": {
+            "notificationId": {
+              "type": "string",
+              "description": "Path parameter: 'notificationId'.",
+              "required": true,
+              "location": "path"
+            }
+          },
+          "parameterOrder": ["notificationId"]
+        }
+      },
+      "resources": {}
+    }
+  }
+}
