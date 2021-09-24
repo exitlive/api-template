@@ -1,0 +1,4 @@
+name: rpc_template
+dependencies:
+  rpc: any
+  logging: any
