@@ -5,29 +5,38 @@ class Registration {
       required: true,
       description:
           'The unencrypted plain text email. This will be verified by hashedEmail')
-  String email;
+  String? email;
 
   @ApiProperty(
       required: true,
       description:
           'The hashed email address that has been sent to the user by email')
-  String hashedEmail;
+  String? hashedEmail;
 
   @ApiProperty(required: true, description: 'A SHA256 hash of the password')
-  String password;
+  String? password;
 
   @ApiProperty(required: true, description: 'The name of the user')
-  String name;
+  String? name;
 
   @ApiProperty(required: true, description: 'The ISO2 country code of the user')
-  String countryCode;
+  String? countryCode;
 
   @ApiProperty(
       description: 'Whether you want a long lived session (use this in an app)')
-  bool longLived;
+  bool? longLived;
 
   @ApiProperty(required: false, description: 'Might be a user_id or page_id')
-  String referrer;
+  String? referrer;
+
+  Registration(
+      {this.email,
+      this.hashedEmail,
+      this.password,
+      this.name,
+      this.countryCode,
+      this.longLived,
+      this.referrer});
 }
 
 /// Gets returned after successful registration.
@@ -36,40 +45,40 @@ class RegistrationInfo {
       required: true,
       description:
           'List of pages this user was made an administrator of before registering')
-  List<Page> pages;
+  List<Page>? pages;
 
   @ApiProperty(required: true, description: 'The user that has been created')
-  User user;
+  User? user;
 }
 
 class UpdateUser {
   @ApiProperty(required: false, description: 'The name of the user')
-  String name;
+  String? name;
 
   @ApiProperty(
       required: false, description: 'If provided the password will be changed')
-  PasswordReset passwordReset;
+  PasswordReset? passwordReset;
 
   @ApiProperty(required: false, description: 'Two letter ISO Code country code')
-  String country;
+  String? country;
 
   @ApiProperty(
       required: false, description: 'Whether the user is over the age of 18')
-  bool isAdult;
+  bool? isAdult;
 }
 
 class PasswordReset {
   @ApiProperty(
       required: true, description: 'A SHA256 hash of the current password')
-  String currentPassword;
+  String? currentPassword;
 
   @ApiProperty(required: true, description: 'A SHA256 hash of the new password')
-  String newPassword;
+  String? newPassword;
 }
 
 class OauthToken {
   @ApiProperty(required: true)
-  String token;
+  String? token;
 
   @ApiProperty(values: {
     'apple': 'When using Apple as OAuth provider',
@@ -77,11 +86,11 @@ class OauthToken {
     'facebook': 'When using Facebook as OAuth provider',
     'twitter': 'When using Twitter as OAuth provider'
   }, required: true)
-  String provider;
+  String? provider;
 
   @ApiProperty(
       description: 'Whether you want a long lived session (use this in an app)')
-  bool longLived;
+  bool? longLived;
 
   @ApiProperty(
     /// Until all mobile clients have upgrade to latest version this needs to
@@ -96,66 +105,95 @@ class OauthToken {
       'web': 'Web',
     },
   )
-  String platform;
+  String? platform;
+
+  OauthToken({this.token, this.provider, this.longLived, this.platform});
 }
 
 class OauthRegistration {
   @ApiProperty(required: true)
-  OauthToken oauthToken;
+  OauthToken? oauthToken;
 
   @ApiProperty(required: false, description: 'Might be a user_id or page_id')
-  String referrer;
+  String? referrer;
 
   @ApiProperty(required: true, description: 'The ISO2 country code of the user')
-  String countryCode;
+  String? countryCode;
+
+  OauthRegistration({
+    this.oauthToken,
+    this.referrer,
+    this.countryCode,
+  });
 }
 
 class SignInRequest {
   @ApiProperty(required: true)
-  String username;
+  final String username;
 
   @ApiProperty(required: true, description: 'The SHA256 hash of the password')
-  String password;
+  final String password;
 
   @ApiProperty(
       description: 'Whether you want a long lived session (use this in an app)')
-  bool longLived;
+  final bool longLived;
+
+  void validate() {
+    print('validate');
+  }
+
+  SignInRequest({
+    required this.username,
+    required this.password,
+    required this.longLived,
+  });
+
+  SignInRequest.signInRequest({
+    required this.username,
+    required this.password,
+    required this.longLived,
+  });
 }
 
 class VerifyRegistrationEmail {
-  String email;
+  String? email;
 }
 
 class ForgotPassword {
-  String email;
+  String? email;
 }
 
 class ResetPasswordWithToken {
-  String token;
+  String? token;
 
-  String password;
+  String? password;
 }
 
 class ResetPassword {
   @ApiProperty(required: true)
-  String oldPassword;
+  String? oldPassword;
 
   @ApiProperty(required: true)
-  String password;
+  String? password;
+
+  ResetPassword({
+    this.oldPassword,
+    this.password,
+  });
 }
 
 class BasePage {
   @ApiProperty(required: true)
-  String id;
+  String? id;
 
   @ApiProperty(required: true)
-  String name;
+  String? name;
 
   @ApiProperty(required: false)
-  String handle;
+  String? handle;
 
   @ApiProperty(required: false)
-  String website;
+  String? website;
 }
 
 @ApiMessage(includeSuper: true)
@@ -163,53 +201,53 @@ class Page extends BasePage {}
 
 class User {
   @ApiProperty(required: true)
-  DateTime creationTime;
+  DateTime? creationTime;
 
   @ApiProperty(required: true)
-  String id;
+  String? id;
 
   @ApiProperty(required: true)
-  String email;
+  String? email;
 
   @ApiProperty(required: true)
-  String name;
+  String? name;
 
   @ApiProperty(required: true, format: 'int64')
-  BigInt lastSeenNotificationMicrosecondsSinceEpoch;
+  BigInt? lastSeenNotificationMicrosecondsSinceEpoch;
 
-  String country;
+  String? country;
 
   @ApiProperty()
-  List<OAuthAccount> oAuthAccounts;
+  List<OAuthAccount>? oAuthAccounts;
 
   @ApiProperty(
       required: false, description: 'Whether the user is over the age of 18')
-  bool isAdult;
+  bool? isAdult;
 
   @ApiProperty(
       required: false,
       description: 'The time, this user has last been logged in.')
-  DateTime lastSignIn;
+  DateTime? lastSignIn;
 }
 
 class OAuthAccount {
   @ApiProperty(required: true)
-  String id;
+  String? id;
 
   @ApiProperty(required: true)
-  String accountId;
+  String? accountId;
 
   @ApiProperty(required: true)
-  String email;
+  String? email;
 
   @ApiProperty(required: true)
-  String name;
+  String? name;
 
   @ApiProperty(required: true)
-  bool isVerified;
+  bool? isVerified;
 
   @ApiProperty(required: true)
-  String provider;
+  String? provider;
 }
 
 const Map<String, String> notificationTypes = {
@@ -223,33 +261,33 @@ const Map<String, String> notificationTypes = {
 
 class Notification {
   @ApiProperty(required: true)
-  String id;
+  String? id;
 
   @ApiProperty(required: true)
-  DateTime creationTime;
+  DateTime? creationTime;
 
   @ApiProperty(required: true, format: 'int64')
-  BigInt creationMicrosecondsSinceEpoch;
+  BigInt? creationMicrosecondsSinceEpoch;
 
   @ApiProperty(required: true, values: notificationTypes)
-  String type;
+  String? type;
 
   @ApiProperty(required: true)
-  String message;
+  String? message;
 
   @ApiProperty(required: true)
-  String messageHtml;
+  String? messageHtml;
 
   @ApiProperty(required: true)
   bool isRead = false;
 
   @ApiProperty(required: true)
-  String imageUrl;
+  String? imageUrl;
 
   @ApiProperty(required: false)
-  String linkUrl;
+  String? linkUrl;
 
   /// An optional secondary image URL that can be used to provide context.
   @ApiProperty(required: false)
-  String contextImageUrl;
+  String? contextImageUrl;
 }

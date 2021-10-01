@@ -7,9 +7,9 @@ class NotificationResource {
       method: 'GET',
       description: 'Retrieves all notifications.')
   Future<List<Notification>> list(
-      {int limit,
-      int offset,
-      String startingFromMicrosecondsSinceEpoch}) async {
+      {int? limit,
+      int? offset,
+      String? startingFromMicrosecondsSinceEpoch}) async {
     return [Notification()..id = '123', Notification()..id = '234'];
   }
 
@@ -18,5 +18,7 @@ class NotificationResource {
       method: 'POST',
       description: 'Marks given notification as read')
   Future<VoidMessage> markAsRead(
-      String notificationId, VoidMessage noMessage) {}
+      String notificationId, VoidMessage noMessage) async {
+    return VoidMessage();
+  }
 }

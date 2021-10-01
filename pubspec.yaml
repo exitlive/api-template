@@ -1,6 +1,11 @@
 name: rpc_template
 environment:
-  sdk: '>=2.10.0 <3.0.0'
+  sdk: '>=2.14.0 <3.0.0'
 dependencies:
-  rpc: any
+  rpc:
+    git:
+      url: https://github.com/prajwal27/rpc.git
+      ref: d61ff29af81bba341f77f60f751540339135ded7
+
+
   logging: any
